@@ -4,6 +4,8 @@ import { Jogador } from "./jogador";
 export class Clube {
     private nome: string;
     private elenco: Jogador[];
+    private elencoReserva: Jogador[];
+    private forcaDoElenco: number;
     private saldo: number;
     private titulos: number;
     private folhaPagamento: number;
@@ -16,10 +18,12 @@ export class Clube {
         this.saldo = saldo;
         this.titulos = 0;
         this.elenco = [];
+        this.elencoReserva = [];
         this.folhaPagamento = 0;
         this.bilheteria = 0;
         this.patrocinio = 0;
         this.socioTorcedor = 0;
+        this.forcaDoElenco = this.calcularForcaDoElenco();
 
     }
      adiciona(jogador: Jogador) {
@@ -29,14 +33,46 @@ export class Clube {
         this.elenco.splice(this.elenco.indexOf(jogador), 1);
     }
 
-     venderJogador(jogador : Jogador) {
-        return this.saldo + jogador.getValorDeMercado();
-
+     venderJogador(jogador : Jogador, clube : Clube): number {
+        this.remove(jogador);
+        console.log("O jogador" + jogador.getNome() + "Foi vendido para o clube " + clube.getNome());
+        clube.saldo -= jogador.getValorDeMercado();
+        clube.adiciona(jogador)
+        return this.saldo += jogador.getValorDeMercado();
     }
 
-    comprarJogador(): void{
-}
-    jogarPartida(): void{
+    comprarJogador(jogador: Jogador, clube: Clube): number {
+        if(this.saldo >= jogador.getValorDeMercado()){
+            this.adiciona(jogador);
+            console.log("O jogador " + jogador.getNome() + " foi comprado do clube " + clube.getNome());
+            clube.venderJogador(jogador, this);
+            return this.saldo -= jogador.getValorDeMercado();
+        } else {
+            console.log("Não há saldo suficiente para comprar o jogador ");
+            return this.saldo;
+        }
+        
+    }
+    calcularForcaDoElenco(): number {
+        let soma: number = 0;
+        for(const jogador of this.elenco) {
+            soma += jogador.getOverAll();   
+        }
+        return soma / this.elenco.length;
+    }
+
+    jogarPartida(this, clube: Clube){
+        if(this.elenco.length == 11 && clube.elenco.length == 11){
+            console.log(this.nome + "Enfrentará o " + clube.nome);
+            if(this.forcaDoElenco > clube.forcaDoElenco) {
+                console.log(this.nome + " ganhou a partida!");
+            } else if(this.forcaDoElenco < clube.forcaDoElenco){
+                console.log(clube.nome + " ganhou a partida!");
+            }else{
+                console.log("O jogo empatou");
+            }
+
+        }
     }
     recolherBilheteria(): void{
     }
@@ -53,6 +89,10 @@ export class Clube {
     getSaldo(): number {
         return this.saldo;
     }
+    getElenco(): Jogador[] {
+        return this.elenco;
+    }
+
     getTitulos(): number {
         return this.titulos;
     }
