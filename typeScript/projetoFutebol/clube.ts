@@ -3,6 +3,7 @@ import { Jogador } from "./jogador";
 
 export class Clube {
     private nome: string;
+    private nomeEstadio: string;
     private elenco: Jogador[];
     private elencoReserva: Jogador[];
     private forcaDoElenco: number;
@@ -12,9 +13,14 @@ export class Clube {
     private bilheteria: number;
     private patrocinio: number;
     private socioTorcedor: number;
+    private capacidadeEstadio: number;
+    private publicoPagante: number;
+    private historico: string[];
+    
 
-    constructor(nome: string, saldo: number) {
+    constructor(nome: string, saldo: number, capacidadeEstadio: number, nomeEstadio: string) {
         this.nome = nome;
+        this.nomeEstadio = nomeEstadio;
         this.saldo = saldo;
         this.titulos = 0;
         this.elenco = [];
@@ -24,6 +30,10 @@ export class Clube {
         this.patrocinio = 0;
         this.socioTorcedor = 0;
         this.forcaDoElenco = this.calcularForcaDoElenco();
+        this.capacidadeEstadio = capacidadeEstadio;
+        this.historico = [];
+        this.publicoPagante = this.capacidadeEstadio;
+        
 
     }
      adiciona(jogador: Jogador) {
@@ -60,21 +70,79 @@ export class Clube {
         }
         return soma / this.elenco.length;
     }
+    calcularPagantes() {
+        if(this.publicoPagante >= this.capacidadeEstadio){
+            console.log("Estádio " + this.nomeEstadio +  " Lotado para o jogo de hoje!");
+            this.publicoPagante = this.capacidadeEstadio;
+            this.saldo += this.publicoPagante * 10;
+            console.log("Bilheteria: " + this.publicoPagante);
+            console.log("Saldo: " + this.saldo);
+        }
+        else if(this.publicoPagante < this.capacidadeEstadio && this.historico[this.historico.length - 1] === "V"){
+            this.saldo += this.publicoPagante * 10;
+            this.publicoPagante += this.publicoPagante * 0.1;
+            console.log("Bilheteria: " + this.publicoPagante);
+            console.log("Saldo: " + this.saldo);
+        }
+        else if(this.publicoPagante < this.capacidadeEstadio && this.historico[this.historico.length - 1] === "D"){
+            this.saldo += this.publicoPagante * 10;
+            this.publicoPagante -= this.publicoPagante * 0.1;
+            console.log("Bilheteria: " + this.publicoPagante);
+            console.log("Saldo: " + this.saldo);
+        }
+        else if(this.publicoPagante < this.capacidadeEstadio && this.historico[this.historico.length - 1] === "E"){
+            this.saldo += this.publicoPagante * 10;
+            this.publicoPagante += this.publicoPagante * 0.05;
+            console.log("Bilheteria: " + this.publicoPagante);
+            console.log("Saldo: " + this.saldo);
+        }
+    }
+
+     
 
     jogarPartida(this, clube: Clube){
         if(this.elenco.length == 11 && clube.elenco.length == 11){
             console.log(this.nome + "Enfrentará o " + clube.nome);
             if(this.forcaDoElenco > clube.forcaDoElenco) {
                 console.log(this.nome + " ganhou a partida!");
+                this.calcularPagantes();
+                this.historico.push("V");
+                clube.historico.push("D");
+                if(this.historico.length == 6){
+                    this.historico.shift();
+                }
+                if(clube.historico.length == 6){
+                    clube.historico.shift();
+                }
+            
             } else if(this.forcaDoElenco < clube.forcaDoElenco){
                 console.log(clube.nome + " ganhou a partida!");
+                this.calcularPagantes();
+                this.historico.push("D");
+                clube.historico.push("V");
+                if(this.historico.length == 6){
+                    this.historico.shift();
+                }
+                if(clube.historico.length == 6){
+                    clube.historico.shift();
+                }
+                
             }else{
                 console.log("O jogo empatou");
+                this.calcularPagantes();
+                this.historico.push("E");
+                clube.historico.push("E");
+                if(this.historico.length == 6){
+                    this.historico.shift();
+                }
+                if(clube.historico.length == 6){
+                    clube.historico.shift();
+                }
             }
 
+        } else{
+            console.log("Os times não estão com 11 jogadores em campo");
         }
-    }
-    recolherBilheteria(): void{
     }
     assinarPatrocinio(): void{
     }
@@ -108,6 +176,9 @@ export class Clube {
     getSocioTorcedor(): number {
         return this.socioTorcedor;
     }
+    getCapacidadeEstadio(): number {
+        return this.capacidadeEstadio;
+    }
     setNome(nome: string) {
         this.nome = nome;
     }
@@ -129,6 +200,7 @@ export class Clube {
     setSocioTorcedor(socioTorcedor: number) {
         this.socioTorcedor = socioTorcedor;
     }
+   
 
 
 }
