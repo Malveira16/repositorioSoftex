@@ -28,13 +28,11 @@ export class Clube {
         this.folhaPagamento = 0;
         this.bilheteria = 0;
         this.patrocinio = 0;
-        this.socioTorcedor = 0;
+        this.socioTorcedor = 100;
         this.forcaDoElenco = this.calcularForcaDoElenco();
         this.capacidadeEstadio = capacidadeEstadio;
         this.historico = [];
         this.publicoPagante = this.capacidadeEstadio;
-        
-
     }
      adiciona(jogador: Jogador) {
         this.elenco.push(jogador);
@@ -144,9 +142,16 @@ export class Clube {
             console.log("Os times não estão com 11 jogadores em campo");
         }
     }
-    assinarPatrocinio(): void{
-    }
-    recolherSocioTorcedor(): void{
+    //deve ser chamado todo mês
+    recolherSocioTorcedor(): number{
+        let sequenciaVitorias = ["V","V","V","V","V",];
+        if(this.historico == sequenciaVitorias && this.historico.length == 5){
+            this.socioTorcedor += 100;
+        }
+        this.socioTorcedor += 1000* this.titulos;
+        return this.saldo += this.socioTorcedor * 20;
+
+
     }
     renovarContrato(): void{
     }
@@ -179,28 +184,5 @@ export class Clube {
     getCapacidadeEstadio(): number {
         return this.capacidadeEstadio;
     }
-    setNome(nome: string) {
-        this.nome = nome;
-    }
-    setSaldo(saldo: number) {
-        this.saldo = saldo;
-    }
-    setTitulos(titulos: number) {
-        this.titulos = titulos;
-    }
-    setFolhaPagamento(folhaPagamento: number) {
-        this.folhaPagamento = folhaPagamento;
-    }
-    setBilheteria(bilheteria: number) {
-        this.bilheteria = bilheteria;
-    }
-    setPatrocinio(patrocinio: number) {
-        this.patrocinio = patrocinio;
-    }
-    setSocioTorcedor(socioTorcedor: number) {
-        this.socioTorcedor = socioTorcedor;
-    }
-   
-
 
 }

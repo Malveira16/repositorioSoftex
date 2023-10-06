@@ -15,7 +15,16 @@ export class Campeonato{
     removeClube(clube: Clube) {
         this.clubes.splice(this.clubes.indexOf(clube), 1);
     }
-    iniciarCampeonato(): void{
+    iniciarCampeonato(){
+        for(let clube of this.clubes){
+            let pagamento = Patrocinio.pagarPatrocinio(clube);
+            let torcedores = clube.getSocioTorcedor();
+            let saldo = clube.getSaldo();
+            let titulos = clube.getTitulos();
+            let novosSocios = torcedores + (titulos* 1000);
+            let novoSaldo = saldo + (torcedores * 20);
+        }
+
 
 
     }

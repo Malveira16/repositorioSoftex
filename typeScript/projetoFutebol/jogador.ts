@@ -10,8 +10,9 @@ export class Jogador {
     private habilidade: number;
     private overAll: number;
     private valorDeMercado: number;
+    private contrato: Date;
  
-     constructor(nome: string, idade: number, altura: number, peso: number, nacionalidade: string, posicao: string, forca: number, velocidade: number, habilidade: number) {
+     constructor(nome: string, idade: number, altura: number, peso: number, nacionalidade: string, posicao: string, forca: number, velocidade: number, habilidade: number, contrato) {
          this.nome = nome;
          this.idade = idade;
          this.altura = altura;
@@ -23,6 +24,7 @@ export class Jogador {
          this.habilidade = habilidade;
          this.overAll = this.gerarOverAll();
          this.valorDeMercado = this.gerarValorDeMercado();
+         this.contrato = contrato;
  }
  gerarOverAll() {
      return (this.forca + this.velocidade + this.habilidade) / 3 - this.idade * 10;
@@ -33,6 +35,7 @@ export class Jogador {
      return this.overAll * 10;
  
  }
+ 
  
  getNome() {
      return this.nome;
