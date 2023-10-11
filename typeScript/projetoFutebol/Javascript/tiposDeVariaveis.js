@@ -1,0 +1,22 @@
+var boolean, bigInt, string, symbol;
+console.log(boolean);
+console.log(bigInt);
+console.log(string);
+console.log(symbol);
+boolean = null;
+bigInt = null;
+string = null;
+symbol = null;
+console.log(boolean);
+console.log(bigInt);
+console.log(string);
+console.log(symbol);
+boolean = true;
+bigInt = 9007199254740992;
+string = "Hello, world!";
+symbol = Symbol();
+console.log(boolean);
+console.log(bigInt);
+console.log(string);
+console.log(symbol);
+
